@@ -27,5 +27,7 @@ _testmain.go
 *.test
 *.prof
 
+debug
+
 .env
 static/message.wav
