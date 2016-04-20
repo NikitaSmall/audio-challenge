@@ -3,16 +3,30 @@
     <title>Audio challenge</title>
 
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
     <script src="/static/recorderjs/recorder.js"></script>
     <script src="/static/audio.js"></script>
-
-
   </head>
   <body>
-    <div id="recorder">
-      Record!
+    <div class="container row">
+      <div class="col-md-offset-1 col-md-12" id="content">
+
+        <div class="jumbotron">
+          <h1>Press the button and get the result!</h1>
+          <p>
+            You may press the button and tell your command to application.
+            After the telling command press the button second time and wait for result.
+          </p>
+          <p>
+            <div id="recorder" class="btn btn-primary btn-lg" role="button">
+              <span>Press and tell the command</span>
+            </div>
+          </p>
+        </div>
+
+      </div>
     </div>
 
     <script src="/static/main.js"></script>

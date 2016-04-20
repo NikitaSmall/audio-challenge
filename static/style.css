@@ -1,0 +1,11 @@
+#content {
+  padding-top: 30px;
+}
+
+.recording span {
+  display: none;
+}
+
+.recording:after {
+  content: "Press at the end of recording";
+}
