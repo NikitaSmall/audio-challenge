@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/nikitasmall/audio-challenge/socket"
 )
 
 // CreateRouter returns a pointer to gin.Engine
@@ -11,6 +12,9 @@ func CreateRouter() *gin.Engine {
 
 	router.GET("/", indexHandler)
 	router.POST("/message", messageUploadHandler)
+
+	go socket.MainHub.Run()
+	router.GET("/socket", hubHandler)
 
 	return router
 }

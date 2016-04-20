@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nikitasmall/audio-challenge/socket"
 	"github.com/nikitasmall/audio-challenge/util"
 )
 
@@ -21,6 +22,7 @@ func messageUploadHandler(c *gin.Context) {
 	if err = util.SaveMessageFile(file); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 	} else {
+		socket.MainHub.SendMessage(socket.TaskAdd, gin.H{"text": "message added"})
 		c.JSON(http.StatusOK, gin.H{"message": "Audio message saved"})
 	}
 }
