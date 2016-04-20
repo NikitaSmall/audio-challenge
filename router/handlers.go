@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nikitasmall/audio-challenge/lib"
+	"github.com/nikitasmall/audio-challenge/util"
 )
 
 func indexHandler(c *gin.Context) {
@@ -18,8 +18,7 @@ func messageUploadHandler(c *gin.Context) {
 		log.Print(err)
 	}
 
-	err = lib.SaveMessageFile(file)
-	if err != nil {
+	if err = util.SaveMessageFile(file); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 	} else {
 		c.JSON(http.StatusOK, gin.H{"message": "Audio message saved"})
