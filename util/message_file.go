@@ -10,7 +10,7 @@ import (
 // and may return error. Message path stored in env variable
 // (usually it stores near static)
 func SaveMessageFile(file io.Reader) error {
-	out, err := os.Create(os.Getenv("MESSAGE_FILE_PATH"))
+	out, err := os.Create(os.Getenv("MESSAGE_FILE"))
 	if err != nil {
 		log.Print(err)
 		return err

@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
+	"github.com/nikitasmall/audio-challenge/config"
 	"github.com/nikitasmall/audio-challenge/router"
-	"github.com/nikitasmall/master-service/config"
 )
 
 func init() {

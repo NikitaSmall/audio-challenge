@@ -1,6 +1,8 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 // CreateRouter returns a pointer to gin.Engine
 // that handles all the incoming requests
