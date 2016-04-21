@@ -18,7 +18,6 @@ func hubHandler(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		panic(err)
-		return
 	}
 
 	client := socket.CreateClient(ws)

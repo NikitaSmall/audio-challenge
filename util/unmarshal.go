@@ -5,17 +5,17 @@ import (
 	"log"
 )
 
-// Message is a struct of Yandex API message
-type Message struct {
+// XMLMessage is a struct of Yandex API message
+type XMLMessage struct {
 	XMLName  xml.Name `xml:"recognitionResults"`
 	Variants []string `xml:"variant"`
 }
 
 // ParseXML parses xml data into map[string]interface{} object
-func ParseXML(data []byte) Message {
+func ParseXML(data []byte) XMLMessage {
 	log.Println(string(data))
 
-	m := Message{}
+	m := XMLMessage{}
 	err := xml.Unmarshal(data, &m)
 	if err != nil {
 		log.Panic(err)

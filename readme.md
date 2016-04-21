@@ -12,6 +12,7 @@ Also usual golang environment is required.
 2. gin-gonic/Gin as http-router/micro-framework
 3. Recorderjs as audio record tool
 4. Gorilla/websocket as a websocket implementation in Go
+5. Yandex speech cloud as a voice recognition tool
 - Bunch of small tools and libs that could be seen inside of source code at `import` statement
 
 ## Comment about language and structure:
@@ -22,6 +23,6 @@ I broke up the functionality into the small packages. Their purposes are obvious
 - `router` - a package with handlers and router config. Handlers are kind a simple actions,
 while each file (`handlers.go`, `socket_handlers.go`) are kind of controllers.
 - `socket` - an util package to provide socket connection. No business logic here, only data-transfer.
-- `util` - an util package to make some basic tasks e.g. audio-file saving.
+- `util` - an util package to make some basic tasks e.g. xml-unmarshaling.
 - `config` - an util package to load configs, env variables and so on.
 - `task` - a package that provides business logic around tasks.

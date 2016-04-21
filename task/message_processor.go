@@ -9,20 +9,17 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/nikitasmall/audio-challenge/config"
 	"github.com/nikitasmall/audio-challenge/util"
 )
 
 // ParseMessage sends the message file to the Yandex API and returns basic task
-func ParseMessage() (*BaseTask, error) {
-	parsedResult := messageRequest(os.Getenv("MESSAGE_FILE"))
-
+func ParseMessage(message io.Reader) (*BaseTask, error) {
+	parsedResult := messageRequest(message)
 	return newTask(parsedResult)
 }
 
-func messageRequest(messagePath string) []byte {
-	message := messageBody(messagePath)
-	uuid := config.RandStringRunes(32)
+func messageRequest(message io.Reader) []byte {
+	uuid := util.RandStringRunes(32)
 
 	url := fmt.Sprintf("%s/asr_xml?uuid=%s&key=%s&topic=notes&lang=ru-RU",
 		os.Getenv("YANDEX_SPEECH_RECOGNITION_URL"),
@@ -41,15 +38,6 @@ func messageRequest(messagePath string) []byte {
 	}
 
 	return res
-}
-
-func messageBody(messagePath string) io.Reader {
-	file, err := os.Open(messagePath)
-	if err != nil {
-		log.Panic(err)
-	}
-
-	return file
 }
 
 func newTask(result []byte) (*BaseTask, error) {
