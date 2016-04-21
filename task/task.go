@@ -1,6 +1,8 @@
 package task
 
 import (
+	"errors"
+	"log"
 	"time"
 )
 
@@ -33,4 +35,26 @@ type PizzaTask struct {
 
 	time   time.Time
 	Status bool
+}
+
+// Process does the PizzaTask work: goes for a pizza
+func (pz *PizzaTask) process() error {
+	return nil
+}
+
+func (pz *PizzaTask) setStatus(status bool) {
+	pz.Status = status
+}
+
+// DefineTask defines type of a task by RawQuery field
+func (task *BaseTask) DefineTask() (Tasker, error) {
+	taskType := task.determinate()
+	log.Println(taskType)
+
+	switch taskType {
+	case "pizza":
+		return &PizzaTask{}, nil
+	default:
+		return nil, errors.New("Cannot determinate task")
+	}
 }
