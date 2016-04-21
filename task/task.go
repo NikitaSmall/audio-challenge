@@ -10,13 +10,10 @@ type Tasker interface {
 	setStatus(status bool)
 }
 
-// BaseTask is an example struct to implement Taskter interface
+// BaseTask is a struct to hold rawQuery string and to determinate the task inside the query
 type BaseTask struct {
-	rawQuery string
-	command  string
-
-	time   time.Time // time to complete the task
-	status bool
+	RawQuery string
+	Status   bool
 }
 
 type orderDetails struct {
@@ -27,7 +24,7 @@ type orderDetails struct {
 
 // PizzaTask is a struct to perform pizza requests
 type PizzaTask struct {
-	rawQuery string
+	RawQuery string
 	command  string
 
 	orderDetails orderDetails
@@ -35,5 +32,5 @@ type PizzaTask struct {
 	pizzeriaName string
 
 	time   time.Time
-	status bool
+	Status bool
 }
