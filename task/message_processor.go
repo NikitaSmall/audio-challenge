@@ -13,9 +13,20 @@ import (
 )
 
 // ParseMessage sends the message file to the Yandex API and returns basic task
-func ParseMessage(message io.Reader) (*BaseTask, error) {
+func ProcessMessage(message io.Reader) (Tasker, error) {
 	parsedResult := messageRequest(message)
-	return newTask(parsedResult)
+
+	t, err := newTask(parsedResult)
+	if err != nil {
+		return nil, err
+	}
+
+	task, err := t.defineTask()
+	if err != nil {
+		return nil, err
+	}
+
+	return task, nil
 }
 
 func messageRequest(message io.Reader) []byte {
@@ -31,6 +42,23 @@ func messageRequest(message io.Reader) []byte {
 	if err != nil {
 		log.Panic(err)
 	}
+
+	res, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	return res
+}
+
+func paramsRequest(text string) []byte {
+	url := fmt.Sprintf("%s/?key=%s&text=%s&layers=Fio,GeoAddr,Date",
+		os.Getenv("YANDEX_MARKUP_URL"),
+		os.Getenv("YANDEX_SPEECH_API_KEY"),
+		text,
+	)
+
+	resp, err := http.Get(url)
 
 	res, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

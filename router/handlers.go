@@ -20,11 +20,10 @@ func messageUploadHandler(c *gin.Context) {
 	}
 
 	var message string
-	if t, err := task.ParseMessage(file); err != nil {
+	if t, err := task.ProcessMessage(file); err != nil {
 		message = err.Error()
 	} else {
-		t.DefineTask()
-		message = t.RawQuery
+		message = t.Query()
 	}
 
 	socket.MainHub.SendMessage(socket.TaskAdd, gin.H{"text": message})
