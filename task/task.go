@@ -64,11 +64,12 @@ func (task *BaseTask) defineTask() (Tasker, error) {
 	switch taskType {
 	case "pizza":
 		return &PizzaTask{
-			RawQuery:  task.RawQuery,
-			Status:    task.Status,
-			OrderList: task.determinateFood(),
-			Command:   "pizza",
-			Time:      date,
+			RawQuery:     task.RawQuery,
+			Status:       task.Status,
+			OrderList:    task.determinateFood(),
+			PizzeriaName: task.determinatePizzeria(),
+			Command:      "pizza",
+			Time:         date,
 			OrderDetails: OrderDetails{
 				UserName: name,
 				Address:  addr,

@@ -22,6 +22,19 @@ func (task BaseTask) determinateTask() string {
 	return "unknown"
 }
 
+func (task BaseTask) determinatePizzeria() string {
+	pizzeriaList := util.FillList(os.Getenv("PIZZERIA_LIST_FILE"))
+
+	for _, pizzeria := range pizzeriaList {
+
+		if strings.Contains(task.RawQuery, pizzeria) {
+			return pizzeria
+		}
+	}
+
+	return ""
+}
+
 func (task BaseTask) determinateFood() string {
 	var order []string
 	foodList := util.FillList(os.Getenv("FOOD_LIST_FILE"))
