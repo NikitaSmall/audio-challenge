@@ -3,6 +3,8 @@ package util
 import (
 	"encoding/xml"
 	"log"
+
+	"github.com/elgs/gojq"
 )
 
 // XMLMessage is a struct of Yandex API message
@@ -11,7 +13,7 @@ type XMLMessage struct {
 	Variants []string `xml:"variant"`
 }
 
-// ParseXML parses xml data into map[string]interface{} object
+// ParseXML parses xml data into XMLMessage object
 func ParseXML(data []byte) XMLMessage {
 	log.Println(string(data))
 
@@ -22,4 +24,16 @@ func ParseXML(data []byte) XMLMessage {
 	}
 
 	return m
+}
+
+// ParseJSON parses json data into
+func ParseJSON(data []byte) *gojq.JQ {
+	log.Println(string(data))
+
+	parser, err := gojq.NewStringQuery(string(data))
+	if err != nil {
+		log.Panic(err)
+	}
+
+	return parser
 }

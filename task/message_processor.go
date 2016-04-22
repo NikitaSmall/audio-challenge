@@ -8,11 +8,13 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
+	"github.com/elgs/gojq"
 	"github.com/nikitasmall/audio-challenge/util"
 )
 
-// ParseMessage sends the message file to the Yandex API and returns basic task
+// ProcessMessage sends the message file to the Yandex API and returns parsed task
 func ProcessMessage(message io.Reader) (Tasker, error) {
 	parsedResult := messageRequest(message)
 
@@ -80,4 +82,62 @@ func newTask(result []byte) (*BaseTask, error) {
 		RawQuery: parsedResult.Variants[0],
 		Status:   false,
 	}, nil
+}
+
+// this terrible func parses incoming message to get as much as possible information abpit data
+func parseTime(params *gojq.JQ) time.Time {
+	date := time.Now()
+
+	if dateArray, err := params.QueryToArray("Date"); err == nil {
+		for _, d := range dateArray {
+			dateField := d.(map[string]interface{})
+			log.Println(d)
+
+			// check that date field is not relative
+			absoluteDay, okD := dateField["Day"]
+			absoluteMonth, okM := dateField["Month"]
+			_, okR := dateField["RelativeDay"]
+			_, okDur := dateField["Duration"]
+			if okD && okM && !(okR || okDur) {
+				date = time.Date(date.Year(), time.Month(absoluteMonth.(float64)), int(absoluteDay.(float64)), date.Hour(), date.Minute(), date.Second(), 0, date.Location())
+			}
+
+			if _, ok := dateField["RelativeDay"]; ok {
+				var relativeM, relativeD int
+
+				if dateM, ok := dateField["Month"]; ok {
+					relativeM = int(dateM.(float64))
+				}
+
+				if dateD, ok := dateField["Day"]; ok {
+					relativeD = int(dateD.(float64))
+				}
+
+				date = date.AddDate(0, relativeM, relativeD)
+			}
+
+			if duration, ok := dateField["Duration"]; ok {
+				dur := duration.(map[string]interface{})
+				var durString string
+
+				if h, ok := dur["Hour"]; ok {
+					durString = fmt.Sprintf("%fh", h.(float64))
+				}
+
+				if m, ok := dur["Min"]; ok {
+					durString = fmt.Sprintf("%s%fm", durString, m.(float64))
+				}
+
+				parsedDuration, err := time.ParseDuration(durString)
+				if err != nil {
+					log.Println("bad parse")
+					break
+				}
+
+				date = date.Add(parsedDuration)
+			}
+		}
+	}
+
+	return date
 }

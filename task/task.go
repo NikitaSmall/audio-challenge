@@ -2,8 +2,9 @@ package task
 
 import (
 	"errors"
-	"log"
 	"time"
+
+	"github.com/nikitasmall/audio-challenge/util"
 )
 
 // Tasker is an interface that all the Tasks must implement
@@ -78,7 +79,9 @@ func (task *BaseTask) defineTask() (Tasker, error) {
 
 func (task *BaseTask) getQueryParams() (string, string, time.Time) {
 	jsonParams := paramsRequest(task.RawQuery)
-	log.Println(string(jsonParams))
+	params := util.ParseJSON(jsonParams)
 
-	return "", "", time.Now()
+	date := parseTime(params)
+
+	return "", "", date
 }
