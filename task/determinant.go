@@ -12,6 +12,8 @@ import (
 	"github.com/nikitasmall/audio-challenge/util"
 )
 
+// determinateTask works with help of outer file which contains
+// task name and its keywords.
 func (task BaseTask) determinateTask() string {
 	taskList := util.FillTaskList(os.Getenv("TASK_LIST_FILE"))
 
@@ -27,6 +29,8 @@ func (task BaseTask) determinateTask() string {
 	return "unknown"
 }
 
+// determinatePizzeria checks for reserved keywords in the provided text
+// and returns the found result (pizzeria name).
 func (task BaseTask) determinatePizzeria() string {
 	pizzeriaList := util.FillList(os.Getenv("PIZZERIA_LIST_FILE"))
 
@@ -40,6 +44,8 @@ func (task BaseTask) determinatePizzeria() string {
 	return ""
 }
 
+// determinateFood checks for reserved keywords in the provided text
+// and returns the found result (joined food name array).
 func (task BaseTask) determinateFood() string {
 	var order []string
 	foodList := util.FillList(os.Getenv("FOOD_LIST_FILE"))

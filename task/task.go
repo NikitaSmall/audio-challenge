@@ -58,7 +58,8 @@ func (pz *PizzaTask) Query() string {
 	return pz.RawQuery
 }
 
-// ProcessMessage sends the message file to the Yandex API and returns parsed task
+// ProcessMessage sends the message file to the Yandex API and returns parsed
+// task as an interface type Tasker.
 func ProcessMessage(message io.Reader) (Tasker, error) {
 	parsedResult := messageRequest(message)
 
@@ -75,7 +76,7 @@ func ProcessMessage(message io.Reader) (Tasker, error) {
 	return task, nil
 }
 
-// defineTask defines type of a task by RawQuery field
+// defineTask defines type of a task by RawQuery field.
 func (task *BaseTask) defineTask() (Tasker, error) {
 	taskType := task.determinateTask()
 

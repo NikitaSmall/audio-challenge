@@ -19,7 +19,7 @@ var upgrader = websocket.Upgrader{
 }
 
 // HubHandler is a function handles GET request and
-// upgrades it to websocket connection
+// upgrades it to websocket connection to update connected clients on some event.
 func hubHandler(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {

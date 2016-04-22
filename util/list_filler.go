@@ -25,6 +25,7 @@ func FillTaskList(sourceFile string) map[string][]string {
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
 
+	// the file breaks by the lines
 	for scanner.Scan() {
 		line := strings.Split(scanner.Text(), ":")
 		list[line[0]] = strings.Split(line[1], ",")
