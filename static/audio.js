@@ -56,7 +56,8 @@ $(document).ready(function() {
         contentType: false,
         processData: false
       }).done(function(data) {
-        // console.log(data);
+        $("#main-recorder").loader('hide');
+        console.log(data);
       });
       // Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
       recIndex++;
@@ -75,6 +76,8 @@ $(document).ready(function() {
         // stop recording
         audioRecorder.stop();
         $(this).toggleClass("recording");
+        $("#main-recorder").loader('show');
+
         audioRecorder.getBuffers( gotBuffers );
     } else {
       // start recording

@@ -2,7 +2,6 @@ package task
 
 import (
 	"errors"
-	"log"
 	"time"
 
 	"github.com/nikitasmall/audio-challenge/util"
@@ -22,22 +21,23 @@ type BaseTask struct {
 	Status   bool
 }
 
-type orderDetails struct {
-	phone    string
-	userName string
-	address  string
+// OrderDetails contains additional general information about order tasks
+type OrderDetails struct {
+	Phone    string
+	UserName string
+	Address  string
 }
 
 // PizzaTask is a struct to perform pizza requests
 type PizzaTask struct {
 	RawQuery string
-	command  string
+	Command  string
 
-	orderDetails orderDetails
-	pizzaName    string
-	pizzeriaName string
+	OrderDetails OrderDetails
+	OrderList    string
+	PizzeriaName string
 
-	time   time.Time
+	Time   time.Time
 	Status bool
 }
 
@@ -57,22 +57,21 @@ func (pz *PizzaTask) Query() string {
 
 // defineTask defines type of a task by RawQuery field
 func (task *BaseTask) defineTask() (Tasker, error) {
-	taskType := task.determinate()
+	taskType := task.determinateTask()
 
 	name, addr, date := task.getQueryParams()
-
-	log.Println(name, addr, date)
 
 	switch taskType {
 	case "pizza":
 		return &PizzaTask{
-			RawQuery: task.RawQuery,
-			Status:   task.Status,
-			command:  "pizza",
-			time:     date,
-			orderDetails: orderDetails{
-				userName: name,
-				address:  addr,
+			RawQuery:  task.RawQuery,
+			Status:    task.Status,
+			OrderList: task.determinateFood(),
+			Command:   "pizza",
+			Time:      date,
+			OrderDetails: OrderDetails{
+				UserName: name,
+				Address:  addr,
 			},
 		}, nil
 	default:
@@ -88,6 +87,5 @@ func (task *BaseTask) getQueryParams() (string, string, time.Time) {
 	addr := parseAddr(params)
 	date := parseTime(params)
 
-	log.Println(addr)
 	return name, addr, date
 }

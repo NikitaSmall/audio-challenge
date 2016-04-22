@@ -20,12 +20,14 @@ func messageUploadHandler(c *gin.Context) {
 	}
 
 	var message string
-	if t, err := task.ProcessMessage(file); err != nil {
+	t, err := task.ProcessMessage(file)
+
+	if err != nil {
 		message = err.Error()
 	} else {
 		message = t.Query()
 	}
 
-	socket.MainHub.SendMessage(socket.TaskAdd, gin.H{"text": message})
-	c.JSON(http.StatusOK, gin.H{"message": message})
+	socket.MainHub.SendMessage(socket.TaskAdd, message)
+	c.JSON(http.StatusOK, t)
 }

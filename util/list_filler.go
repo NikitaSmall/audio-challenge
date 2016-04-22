@@ -27,3 +27,23 @@ func FillTaskList(sourceFile string) map[string][]string {
 
 	return list
 }
+
+// FillList collect usual list information from provided file
+func FillList(sourceFile string) []string {
+	var list []string
+
+	file, err := os.Open(sourceFile)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	scanner.Split(bufio.ScanLines)
+
+	for scanner.Scan() {
+		list = append(list, strings.Split(scanner.Text(), ",")...)
+	}
+
+	return list
+}
