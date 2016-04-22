@@ -84,14 +84,45 @@ func newTask(result []byte) (*BaseTask, error) {
 	}, nil
 }
 
-// this terrible func parses incoming message to get as much as possible information abpit data
+func parseName(params *gojq.JQ) string {
+	var name string
+
+	if nameArray, err := params.QueryToArray("Fio"); err == nil {
+		for _, n := range nameArray {
+			nameField := n.(map[string]interface{})
+			name = nameField["FirstName"].(string)
+		}
+	}
+
+	return name
+}
+
+func parseAddr(params *gojq.JQ) string {
+	var addr string
+
+	if addrArray, err := params.QueryToArray("GeoAddr"); err == nil {
+		for _, a := range addrArray {
+			addrField := a.(map[string]interface{})
+			for _, field := range addrField["Fields"].([]interface{}) {
+				if len(addr) == 0 {
+					addr = fmt.Sprintf("%s%s", addr, field.(map[string]interface{})["Name"].(string))
+				} else {
+					addr = fmt.Sprintf("%s, %s", addr, field.(map[string]interface{})["Name"].(string))
+				}
+			}
+		}
+	}
+
+	return addr
+}
+
+// this terrible func parses incoming message to get as much as possible information about date
 func parseTime(params *gojq.JQ) time.Time {
 	date := time.Now()
 
 	if dateArray, err := params.QueryToArray("Date"); err == nil {
 		for _, d := range dateArray {
 			dateField := d.(map[string]interface{})
-			log.Println(d)
 
 			// check that date field is not relative
 			absoluteDay, okD := dateField["Day"]

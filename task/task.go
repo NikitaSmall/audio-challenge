@@ -2,6 +2,7 @@ package task
 
 import (
 	"errors"
+	"log"
 	"time"
 
 	"github.com/nikitasmall/audio-challenge/util"
@@ -60,6 +61,8 @@ func (task *BaseTask) defineTask() (Tasker, error) {
 
 	name, addr, date := task.getQueryParams()
 
+	log.Println(name, addr, date)
+
 	switch taskType {
 	case "pizza":
 		return &PizzaTask{
@@ -81,7 +84,10 @@ func (task *BaseTask) getQueryParams() (string, string, time.Time) {
 	jsonParams := paramsRequest(task.RawQuery)
 	params := util.ParseJSON(jsonParams)
 
+	name := parseName(params)
+	addr := parseAddr(params)
 	date := parseTime(params)
 
-	return "", "", date
+	log.Println(addr)
+	return name, addr, date
 }
