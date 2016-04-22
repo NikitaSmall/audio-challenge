@@ -1,6 +1,12 @@
+/*
+ * This package holds router and hadnlers for its routes.
+ * In this file websocket connection handler is declared.
+ */
 package router
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"github.com/nikitasmall/audio-challenge/socket"
@@ -17,11 +23,12 @@ var upgrader = websocket.Upgrader{
 func hubHandler(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
-		panic(err)
+		log.Panic(err)
 	}
 
 	client := socket.CreateClient(ws)
 	socket.MainHub.Register(client)
+
 	go client.ReadPump()
 	client.WritePump()
 }

@@ -1,3 +1,7 @@
+/*
+ * This package holds websocket preferences, initialisation and hub initialisation.
+ * This file holds constants that can help to communicate with webclients standart way.
+ */
 package socket
 
 // constants contains special instuctions

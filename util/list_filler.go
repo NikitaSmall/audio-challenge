@@ -1,3 +1,8 @@
+/*
+ * This package holds utility functions.
+ * This file holds functions to fill inner lists from outer files (see lists directory).
+ * This functions used to load task lists to map or slice of values.
+ */
 package util
 
 import (

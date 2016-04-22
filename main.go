@@ -1,3 +1,6 @@
+/*
+ * This main package holds the inital config and startups whole the project.
+ */
 package main
 
 import (

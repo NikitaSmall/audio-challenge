@@ -1,3 +1,8 @@
+/*
+ * This package holds the main logic. Here tasks are parsed, created, processed.
+ * This file holds API-specific (Yandex-API currently) functions.
+ * Also this file contains main parse functions.
+ */
 package task
 
 import (
@@ -14,21 +19,29 @@ import (
 	"github.com/nikitasmall/audio-challenge/util"
 )
 
-// ProcessMessage sends the message file to the Yandex API and returns parsed task
-func ProcessMessage(message io.Reader) (Tasker, error) {
-	parsedResult := messageRequest(message)
+func newTask(rawTask []byte) (*BaseTask, error) {
+	parsedResult := util.ParseXML(rawTask)
 
-	t, err := newTask(parsedResult)
-	if err != nil {
-		return nil, err
+	if len(parsedResult.Variants) == 0 {
+		log.Print("Unsuccessful recognition")
+		return nil, errors.New("Unsuccessful recognition")
 	}
 
-	task, err := t.defineTask()
-	if err != nil {
-		return nil, err
-	}
+	return &BaseTask{
+		RawQuery: parsedResult.Variants[0],
+		Status:   false,
+	}, nil
+}
 
-	return task, nil
+func (task *BaseTask) getQueryParams() (string, string, time.Time) {
+	jsonParams := paramsRequest(task.RawQuery)
+	params := util.ParseJSON(jsonParams)
+
+	name := parseName(params)
+	addr := parseAddr(params)
+	date := parseTime(params)
+
+	return name, addr, date
 }
 
 func messageRequest(message io.Reader) []byte {
@@ -68,20 +81,6 @@ func paramsRequest(text string) []byte {
 	}
 
 	return res
-}
-
-func newTask(result []byte) (*BaseTask, error) {
-	parsedResult := util.ParseXML(result)
-
-	if len(parsedResult.Variants) == 0 {
-		log.Print("Unsuccessful recognition")
-		return nil, errors.New("Unsuccessful recognition")
-	}
-
-	return &BaseTask{
-		RawQuery: parsedResult.Variants[0],
-		Status:   false,
-	}, nil
 }
 
 func parseName(params *gojq.JQ) string {

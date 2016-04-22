@@ -1,3 +1,11 @@
+/*
+ * This package holds utility functions.
+ * This file holds functions to unmarshal xml or json input.
+ * The result stored in XMLMessage struct for XML and
+ * in gojq.JQ (which is []interface{} for real) for json.
+ * There is no good simple struct for json input because of great variability for
+ * API answers in json.
+ */
 package util
 
 import (

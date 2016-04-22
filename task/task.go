@@ -1,10 +1,13 @@
+/*
+ * This package holds the main logic. Here tasks are parsed, created, processed.
+ * This file holds main declarations and some main task methods.
+ */
 package task
 
 import (
 	"errors"
+	"io"
 	"time"
-
-	"github.com/nikitasmall/audio-challenge/util"
 )
 
 // Tasker is an interface that all the Tasks must implement
@@ -55,6 +58,23 @@ func (pz *PizzaTask) Query() string {
 	return pz.RawQuery
 }
 
+// ProcessMessage sends the message file to the Yandex API and returns parsed task
+func ProcessMessage(message io.Reader) (Tasker, error) {
+	parsedResult := messageRequest(message)
+
+	t, err := newTask(parsedResult)
+	if err != nil {
+		return nil, err
+	}
+
+	task, err := t.defineTask()
+	if err != nil {
+		return nil, err
+	}
+
+	return task, nil
+}
+
 // defineTask defines type of a task by RawQuery field
 func (task *BaseTask) defineTask() (Tasker, error) {
 	taskType := task.determinateTask()
@@ -78,15 +98,4 @@ func (task *BaseTask) defineTask() (Tasker, error) {
 	default:
 		return nil, errors.New("Cannot determinate task")
 	}
-}
-
-func (task *BaseTask) getQueryParams() (string, string, time.Time) {
-	jsonParams := paramsRequest(task.RawQuery)
-	params := util.ParseJSON(jsonParams)
-
-	name := parseName(params)
-	addr := parseAddr(params)
-	date := parseTime(params)
-
-	return name, addr, date
 }

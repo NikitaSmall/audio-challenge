@@ -1,3 +1,7 @@
+/*
+ * This package holds websocket preferences, initialisation and hub initialisation.
+ * This file holds hub initialisation, functions and configs.
+ */
 package socket
 
 import (

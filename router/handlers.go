@@ -1,3 +1,8 @@
+/*
+ * This package holds router and hadnlers for its routes.
+ * In this file handlers are declared.
+ * They serve as basic route actions.
+ */
 package router
 
 import (

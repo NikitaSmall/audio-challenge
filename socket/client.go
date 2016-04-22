@@ -1,3 +1,8 @@
+/*
+ * This package holds websocket preferences, initialisation and hub initialisation.
+ * This file holds basic client configs,
+ * functions and ways to contact main hub and webclient (browser) via websocket.
+ */
 package socket
 
 import (

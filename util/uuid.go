@@ -1,3 +1,7 @@
+/*
+ * This package holds utility functions.
+ * This file holds function to genarate random uuid for Yandex API.
+ */
 package util
 
 import (
