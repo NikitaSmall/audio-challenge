@@ -7,6 +7,7 @@ package task
 import (
 	"errors"
 	"io"
+	"log"
 	"os"
 	"time"
 
@@ -21,7 +22,7 @@ var collectionName = "tasks"
 type Tasker interface {
 	id() string
 	process() error
-	setStatus(status bool)
+	changeStatus(status bool)
 
 	Query() string
 }
@@ -56,11 +57,19 @@ type PizzaTask struct {
 
 // Process does the PizzaTask work: goes for a pizza
 func (pz *PizzaTask) process() error {
+	pz.changeStatus(true)
 	return nil
 }
 
-func (pz *PizzaTask) setStatus(status bool) {
-	pz.Status = status
+func (pz *PizzaTask) changeStatus(status bool) {
+	session := config.Connect()
+	defer session.Close()
+
+	tasksCollection := session.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
+	err := tasksCollection.Update(bson.M{"_id": pz.Id}, bson.M{"$set": bson.M{"status": status}})
+	if err != nil {
+		log.Printf("Error on changing tasks status: %s", err.Error())
+	}
 }
 
 // Query returns raw query method
