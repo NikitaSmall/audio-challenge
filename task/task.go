@@ -7,11 +7,19 @@ package task
 import (
 	"errors"
 	"io"
+	"os"
 	"time"
+
+	"github.com/nikitasmall/audio-challenge/config"
+	"gopkg.in/mgo.v2/bson"
 )
+
+// Config variables for handy connection.
+var collectionName = "tasks"
 
 // Tasker is an interface that all the Tasks must implement
 type Tasker interface {
+	id() string
 	process() error
 	setStatus(status bool)
 
@@ -33,6 +41,8 @@ type OrderDetails struct {
 
 // PizzaTask is a struct to perform pizza requests
 type PizzaTask struct {
+	Id string `json:"id" bson:"_id,omitempty"`
+
 	RawQuery string
 	Command  string
 
@@ -40,8 +50,8 @@ type PizzaTask struct {
 	OrderList    string
 	PizzeriaName string
 
-	Time   time.Time
-	Status bool
+	Time   time.Time `json:"time"`
+	Status bool      `json:"status"`
 }
 
 // Process does the PizzaTask work: goes for a pizza
@@ -56,6 +66,10 @@ func (pz *PizzaTask) setStatus(status bool) {
 // Query returns raw query method
 func (pz *PizzaTask) Query() string {
 	return pz.RawQuery
+}
+
+func (pz *PizzaTask) id() string {
+	return pz.Id
 }
 
 // ProcessMessage sends the message file to the Yandex API and returns parsed
@@ -73,7 +87,7 @@ func ProcessMessage(message io.Reader) (Tasker, error) {
 		return nil, err
 	}
 
-	return task, nil
+	return saveTask(task)
 }
 
 // defineTask defines type of a task by RawQuery field.
@@ -85,6 +99,7 @@ func (task *BaseTask) defineTask() (Tasker, error) {
 	switch taskType {
 	case "pizza":
 		return &PizzaTask{
+			Id:           bson.NewObjectId().Hex(),
 			RawQuery:     task.RawQuery,
 			Status:       task.Status,
 			OrderList:    task.determinateFood(),
@@ -98,5 +113,32 @@ func (task *BaseTask) defineTask() (Tasker, error) {
 		}, nil
 	default:
 		return nil, errors.New("Cannot determinate task")
+	}
+}
+
+// saveTask stores sucessfully parsed task to mongo collection
+func saveTask(t Tasker) (Tasker, error) {
+	session := config.Connect()
+	defer session.Close()
+
+	tasksCollection := session.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
+	return t, tasksCollection.Insert(t)
+}
+
+// TaskList returns list of all the possible tasks of some special type
+func TaskList(kind string) (interface{}, error) {
+	session := config.Connect()
+	defer session.Close()
+
+	tasksCollection := session.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
+
+	switch kind {
+	case "pizza":
+		var tasks []PizzaTask
+
+		err := tasksCollection.Find(nil).All(&tasks)
+		return tasks, err
+	default:
+		return nil, errors.New("Wrong task type")
 	}
 }

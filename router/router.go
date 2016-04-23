@@ -16,6 +16,8 @@ func CreateRouter() *gin.Engine {
 	router := newRouter()
 
 	router.GET("/", indexHandler)
+	router.GET("/tasks/:type", taskListHandler)
+
 	router.POST("/message", messageUploadHandler)
 
 	go socket.MainHub.Run()
