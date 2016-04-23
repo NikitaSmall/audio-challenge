@@ -16,7 +16,7 @@ func CreateRouter() *gin.Engine {
 	router := newRouter()
 
 	router.GET("/", indexHandler)
-	router.GET("/tasks/:type", taskListHandler)
+	router.GET("/tasks/", taskListHandler)
 
 	router.POST("/message", messageUploadHandler)
 

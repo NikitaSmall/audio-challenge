@@ -134,20 +134,17 @@ func saveTask(t Tasker) (Tasker, error) {
 	return t, tasksCollection.Insert(t)
 }
 
-// TaskList returns list of all the possible tasks of some special type
-func TaskList(kind string) (interface{}, error) {
+// TaskList returns list of all the possible tasks.
+// interface returning value is used for getting mutability and
+// easy way to get different types of tasks.
+func TaskList() (interface{}, error) {
 	session := config.Connect()
 	defer session.Close()
 
 	tasksCollection := session.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
 
-	switch kind {
-	case "pizza":
-		var tasks []PizzaTask
+	var tasks []interface{}
 
-		err := tasksCollection.Find(nil).All(&tasks)
-		return tasks, err
-	default:
-		return nil, errors.New("Wrong task type")
-	}
+	err := tasksCollection.Find(nil).All(&tasks)
+	return tasks, err
 }

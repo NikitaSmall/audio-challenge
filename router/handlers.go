@@ -22,7 +22,7 @@ func indexHandler(c *gin.Context) {
 // This hadnlers tries to get all the tasks of some type (e.g. pizza tasks)
 // and returns them as json array. Returns an error message in case of failure.
 func taskListHandler(c *gin.Context) {
-	tasks, err := task.TaskList(c.Param("type"))
+	tasks, err := task.TaskList()
 	if err == nil {
 		c.JSON(http.StatusOK, tasks)
 	} else {
