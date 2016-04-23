@@ -35,9 +35,10 @@ type BaseTask struct {
 
 // OrderDetails contains additional general information about order tasks
 type OrderDetails struct {
-	Phone    string
-	UserName string
-	Address  string
+	Phone       string
+	UserName    string
+	Address     string
+	PaymentType string
 }
 
 // PizzaTask is a struct to perform pizza requests
@@ -116,8 +117,9 @@ func (task *BaseTask) defineTask() (Tasker, error) {
 			Command:      "pizza",
 			Time:         date,
 			OrderDetails: OrderDetails{
-				UserName: name,
-				Address:  addr,
+				UserName:    name,
+				Address:     addr,
+				PaymentType: task.determinatePaymentType(),
 			},
 		}, nil
 	default:

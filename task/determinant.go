@@ -59,3 +59,19 @@ func (task BaseTask) determinateFood() string {
 
 	return strings.Join(order, ", ")
 }
+
+// determinatePaymentType checks for key words about payment type
+// inside the provided message and returns it.
+func (task BaseTask) determinatePaymentType() string {
+	if strings.Contains(task.RawQuery, "налич") ||
+		strings.Contains(task.RawQuery, "наличные") ||
+		strings.Contains(task.RawQuery, "при доставке") ||
+		strings.Contains(task.RawQuery, "с курьером") ||
+		strings.Contains(task.RawQuery, "курьеру") ||
+		strings.Contains(task.RawQuery, "cash") {
+
+		return "cash"
+	}
+
+	return "terminal"
+}
