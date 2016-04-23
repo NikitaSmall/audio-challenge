@@ -56,8 +56,11 @@ $(document).ready(function() {
         contentType: false,
         processData: false
       }).done(function(data) {
-        $("#main-recorder").loader('hide');
         console.log(data);
+      }).fail(function(data) {
+        alert(data.responseText);
+      }).always(function() {
+        $("#main-recorder").loader('hide');
       });
       // Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
       recIndex++;

@@ -35,20 +35,17 @@ func taskListHandler(c *gin.Context) {
 // It is sent immediately to the recognition API. After this work done
 // the answer is sent back to client.
 func messageUploadHandler(c *gin.Context) {
-	file, _, err := c.Request.FormFile("blob")
+	messageFile, _, err := c.Request.FormFile("blob")
 	if err != nil {
 		log.Print(err)
 	}
 
-	var message string
-	t, err := task.ProcessMessage(file)
+	t, err := task.ProcessMessage(messageFile)
 
 	if err != nil {
-		message = err.Error()
+		c.String(http.StatusBadRequest, err.Error())
 	} else {
-		message = t.Query()
+		socket.MainHub.SendMessage(socket.TaskAdd, t)
+		c.JSON(http.StatusOK, t)
 	}
-
-	socket.MainHub.SendMessage(socket.TaskAdd, message)
-	c.JSON(http.StatusOK, t)
 }

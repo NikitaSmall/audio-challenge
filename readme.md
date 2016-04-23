@@ -13,11 +13,15 @@ Also usual golang environment is required.
 3. Recorderjs as audio record tool
 4. Gorilla/websocket as a websocket implementation in Go
 5. Yandex speech cloud as a voice recognition tool
+6. mgo as a mongoDB adapter
 - Bunch of small tools and libs that could be seen inside of source code at `import` statement
 
 ## Comment about language and structure:
 I used Golang in this project due to my love to this language and according the task:
 Go is fast, good at multi-threading (I use go-routines to ask for tasks), simple language.
+
+Every package and every source code file filled with a go-doc comments about package
+and about every function or method (even unexported functions have comments due to make your work a little bit easier).
 
 I broke up the functionality into the small packages. Their purposes are obvious but here is a list:
 - `router` - a package with handlers and router config. Handlers are kind a simple actions,
