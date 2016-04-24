@@ -7,10 +7,13 @@ package task
 
 import (
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/nikitasmall/audio-challenge/util"
 )
+
+var cashRegexp = regexp.MustCompile("налич|при доставке|по доставке|курьер|cash")
 
 // determinateTask works with help of outer file which contains
 // task name and its keywords.
@@ -63,13 +66,7 @@ func (task BaseTask) determinateFood() string {
 // determinatePaymentType checks for key words about payment type
 // inside the provided message and returns it.
 func (task BaseTask) determinatePaymentType() string {
-	if strings.Contains(task.RawQuery, "налич") ||
-		strings.Contains(task.RawQuery, "наличные") ||
-		strings.Contains(task.RawQuery, "при доставке") ||
-		strings.Contains(task.RawQuery, "с курьером") ||
-		strings.Contains(task.RawQuery, "курьеру") ||
-		strings.Contains(task.RawQuery, "cash") {
-
+	if cashRegexp.FindStringIndex(task.RawQuery) != nil {
 		return "cash"
 	}
 
