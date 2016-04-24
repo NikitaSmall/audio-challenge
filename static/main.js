@@ -8,6 +8,28 @@ $(document).ready(function() {
   connection.onmessage = function(data) {
     console.log(data.data);
   };
+
+  $.ajax({
+    method: 'GET',
+    url: '/tasks',
+  }).done(function(data) {
+    console.log(data);
+    var taskTable = $('#tasks table tbody');
+
+    data.forEach(function(task) {
+      taskTable.append('<tr id="' + task._id + '">' +
+        '<td>' + task.command + '</td>' +
+        '<td>' + task.time + '</td>' +
+        '<td>' + task.orderdetails.username + '</td>' +
+        '<td>' + task.orderdetails.address + '</td>' +
+        '<td>' + task.orderdetails.paymenttype + '</td>' +
+        '<td>' + task.orderlist + '</td>' +
+        '<td>' + task.pizzerianame + '</td>' +
+        '<td class="status">' + task.status + '</td>' +
+      '</tr>');
+    });
+  });
+
 });
 
 function connectionType() {

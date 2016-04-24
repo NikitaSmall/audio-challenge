@@ -13,6 +13,7 @@ import (
 	"github.com/nikitasmall/audio-challenge/util"
 )
 
+// cashRegexp helps to determinate cash type
 var cashRegexp = regexp.MustCompile("налич|при доставке|по доставке|курьер|cash")
 
 // determinateTask works with help of outer file which contains
