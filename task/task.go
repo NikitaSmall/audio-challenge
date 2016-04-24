@@ -35,10 +35,10 @@ type BaseTask struct {
 
 // OrderDetails contains additional general information about order tasks
 type OrderDetails struct {
-	Phone       string
-	UserName    string
-	Address     string
-	PaymentType string
+	Phone       string `json:"phone"`
+	UserName    string `json:"username"`
+	Address     string `json:"address"`
+	PaymentType string `json:"paymanttype"`
 }
 
 // PizzaTask is a struct to perform pizza requests
@@ -46,11 +46,11 @@ type PizzaTask struct {
 	Id string `json:"id" bson:"_id,omitempty"`
 
 	RawQuery string
-	Command  string
+	Command  string `json:"command"`
 
-	OrderDetails OrderDetails
-	OrderList    string
-	PizzeriaName string
+	OrderDetails OrderDetails `json:"orderdetails"`
+	OrderList    string       `json:"orderlist"`
+	PizzeriaName string       `json:"pizzerianame"`
 
 	Time   time.Time `json:"time"`
 	Status bool      `json:"status"`

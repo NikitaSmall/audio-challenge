@@ -6,31 +6,43 @@ $(document).ready(function() {
   };
 
   connection.onmessage = function(data) {
-    console.log(data.data);
+    var message = JSON.parse(data.data.toLowerCase());
+
+    switch (message.action) {
+      case "taskadded":
+        addTask($('#tasks table tbody'), message.message);
+        break;
+
+      default:
+      console.log('Unrecoginised task');
+    }
   };
 
   $.ajax({
     method: 'GET',
     url: '/tasks',
   }).done(function(data) {
-    console.log(data);
     var taskTable = $('#tasks table tbody');
 
     data.forEach(function(task) {
-      taskTable.append('<tr id="' + task._id + '">' +
-        '<td>' + task.command + '</td>' +
-        '<td>' + task.time + '</td>' +
-        '<td>' + task.orderdetails.username + '</td>' +
-        '<td>' + task.orderdetails.address + '</td>' +
-        '<td>' + task.orderdetails.paymenttype + '</td>' +
-        '<td>' + task.orderlist + '</td>' +
-        '<td>' + task.pizzerianame + '</td>' +
-        '<td class="status">' + task.status + '</td>' +
-      '</tr>');
+      addTask(taskTable, task);
     });
   });
 
 });
+
+function addTask(taskTable, task) {
+  taskTable.append('<tr id="' + task._id + '">' +
+    '<td>' + task.command + '</td>' +
+    '<td>' + task.time + '</td>' +
+    '<td>' + task.orderdetails.username + '</td>' +
+    '<td>' + task.orderdetails.address + '</td>' +
+    '<td>' + task.orderdetails.paymenttype + '</td>' +
+    '<td>' + task.orderlist + '</td>' +
+    '<td>' + task.pizzerianame + '</td>' +
+    '<td class="status">' + task.status + '</td>' +
+  '</tr>');
+}
 
 function connectionType() {
   var docUrl = document.URL;
