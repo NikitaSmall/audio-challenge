@@ -13,6 +13,10 @@ $(document).ready(function() {
         addTask($('#tasks table tbody'), message.message);
         break;
 
+      case "taskcompleted":
+        var id = message.message._id || message.message.id;
+        $('#' + id + ' td.status').text(message.message.status);
+        break;
       default:
       console.log('Unrecoginised task');
     }
@@ -32,7 +36,8 @@ $(document).ready(function() {
 });
 
 function addTask(taskTable, task) {
-  taskTable.append('<tr id="' + task._id + '">' +
+  var id = task._id || task.id;
+  taskTable.append('<tr id="' + id + '">' +
     '<td>' + task.command + '</td>' +
     '<td>' + task.time + '</td>' +
     '<td>' + task.orderdetails.username + '</td>' +

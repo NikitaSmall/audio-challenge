@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/nikitasmall/audio-challenge/config"
+	"github.com/nikitasmall/audio-challenge/socket"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -38,7 +39,7 @@ type OrderDetails struct {
 	Phone       string `json:"phone"`
 	UserName    string `json:"username"`
 	Address     string `json:"address"`
-	PaymentType string `json:"paymanttype"`
+	PaymentType string `json:"paymenttype"`
 }
 
 // PizzaTask is a struct to perform pizza requests
@@ -70,6 +71,9 @@ func (pz *PizzaTask) changeStatus(status bool) {
 	err := tasksCollection.Update(bson.M{"_id": pz.Id}, bson.M{"$set": bson.M{"status": status}})
 	if err != nil {
 		log.Printf("Error on changing tasks status: %s", err.Error())
+	} else {
+		pz.Status = true
+		socket.MainHub.SendMessage(socket.TaskComplete, pz)
 	}
 }
 

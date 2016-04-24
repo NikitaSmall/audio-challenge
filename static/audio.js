@@ -44,8 +44,6 @@ $(document).ready(function() {
   }
 
   function doneEncoding( blob ) {
-      console.log(blob);
-
       var data = new FormData();
       data.append('blob', blob);
 
@@ -55,8 +53,6 @@ $(document).ready(function() {
         data: data,
         contentType: false,
         processData: false
-      }).done(function(data) {
-        console.log(data);
       }).fail(function(data) {
         alert(data.responseText);
       }).always(function() {
