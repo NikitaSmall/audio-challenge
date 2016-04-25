@@ -1,3 +1,6 @@
+/*Package router holds router and hadnlers for its routes.
+ * In this file session functions and helpers are declared.
+ */
 package router
 
 import (
@@ -109,6 +112,7 @@ func login(c *gin.Context) {
 
 	err := u.CheckUser()
 	if err != nil {
+		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 	} else {
 		setSessionUser(u.Username, u.Phone, c)
@@ -124,6 +128,8 @@ func logout(c *gin.Context) {
 	}
 
 	delete(session.Values, "username")
+	delete(session.Values, "phone")
+
 	err = session.Save(c.Request, c.Writer)
 	if err != nil {
 		log.Panic("Cannot save session. ", err.Error())

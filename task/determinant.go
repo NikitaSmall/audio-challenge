@@ -1,5 +1,4 @@
-/*
- * This package holds the main logic. Here tasks are parsed, created, processed.
+/*Package task holds the main logic. Here tasks are parsed, created, processed.
  * This file holds task definition method and some task-specific functions,
  * such as pizzeria name recognition.
  */

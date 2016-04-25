@@ -1,5 +1,4 @@
-/*
- * This package holds router and hadnlers for its routes.
+/*Package router holds router and hadnlers for its routes.
  * In this file basic router is generated, with basic preferences.
  * Also MainHub (for websocket connection purposes) starts to work here.
  */

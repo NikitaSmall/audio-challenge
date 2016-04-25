@@ -1,5 +1,4 @@
-/*
- * This package holds utility functions.
+/*Package util holds utility functions.
  * This file holds functions to unmarshal xml or json input.
  * The result stored in XMLMessage struct for XML and
  * in gojq.JQ (which is []interface{} for real) for json.

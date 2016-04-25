@@ -12,8 +12,9 @@ Also usual golang environment is required.
 2. gin-gonic/Gin as http-router/micro-framework
 3. Recorderjs as audio record tool
 4. Gorilla/websocket as a websocket implementation in Go
-5. Yandex speech cloud as a voice recognition tool
-6. mgo as a mongoDB adapter
+5. Gorilla/session as a simple session interface
+6. Yandex speech cloud as a voice recognition tool
+7. mgo as a mongoDB adapter
 - Bunch of small tools and libs that could be seen inside of source code at `import` statement
 
 ## Comment about language and structure:
@@ -30,3 +31,4 @@ while each file (`handlers.go`, `socket_handlers.go`) are kind of controllers.
 - `util` - an util package to make some basic tasks e.g. xml-unmarshaling.
 - `config` - an util package to load configs, env variables and so on.
 - `task` - a package that provides business logic around tasks.
+- `user` - a package that provides basic auth logic.

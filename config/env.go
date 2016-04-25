@@ -1,5 +1,4 @@
-/*
- * This package holds ways to get and setup environment and configs.
+/*Package config holds ways to get and setup environment and configs.
  * In current implementation this is only one function to setup
  * environment from `.env` file.
  */

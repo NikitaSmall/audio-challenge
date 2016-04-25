@@ -1,5 +1,4 @@
-/*
- * This package holds utility functions.
+/*Package util holds utility functions.
  * This file holds function to genarate random uuid for Yandex API.
  */
 package util

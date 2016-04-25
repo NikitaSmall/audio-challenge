@@ -1,5 +1,4 @@
-/*
- * This package holds websocket preferences, initialisation and hub initialisation.
+/*Package socket holds websocket preferences, initialisation and hub initialisation.
  * This file holds hub initialisation, functions and configs.
  */
 package socket
@@ -9,6 +8,7 @@ import (
 	"log"
 )
 
+// MainHub is initialised struct that holds all the websocket connections.
 var MainHub = newHub()
 
 // Hub is a simple hub that manages all the socket connections as a clients
@@ -52,7 +52,7 @@ func (hub *Hub) count() int {
 	return len(hub.clients)
 }
 
-// function makes preparations to broadcast message to all clients
+// SendMessage makes preparations and broadcasts message to all clients
 // if there are clients in a hub
 func (hub *Hub) SendMessage(action string, message interface{}) {
 	if hub.isEmpty() {
@@ -66,7 +66,7 @@ func (hub *Hub) SendMessage(action string, message interface{}) {
 // helper function returns prepared message
 // that contains the message itself and action description
 func prepareMessage(action string, message interface{}) []byte {
-	obj, err := json.Marshal(SocketMessage{Action: action, Message: message})
+	obj, err := json.Marshal(Message{Action: action, Message: message})
 	if err != nil {
 		log.Panic("Error on marchalising message. ", err.Error())
 	}
@@ -74,7 +74,7 @@ func prepareMessage(action string, message interface{}) []byte {
 	return obj
 }
 
-// main hub process
+// Run function runs main hub processes
 func (hub *Hub) Run() {
 	for {
 		select {

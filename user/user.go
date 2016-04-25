@@ -1,3 +1,6 @@
+/*Package user holds main auth logic.
+ * Here users are created, checked in db and so on.
+ */
 package user
 
 import (

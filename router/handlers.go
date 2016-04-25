@@ -1,5 +1,4 @@
-/*
- * This package holds router and hadnlers for its routes.
+/*Package router holds router and hadnlers for its routes.
  * In this file handlers are declared.
  * They serve as basic route actions.
  */
@@ -22,7 +21,7 @@ func indexHandler(c *gin.Context) {
 // This hadnlers tries to get all the tasks of some type (e.g. pizza tasks)
 // and returns them as json array. Returns an error message in case of failure.
 func taskListHandler(c *gin.Context) {
-	tasks, err := task.TaskList()
+	tasks, err := task.List()
 	if err == nil {
 		c.JSON(http.StatusOK, tasks)
 	} else {

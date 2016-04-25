@@ -1,5 +1,4 @@
-/*
- * This main package holds the inital config and startups the whole project.
+/*Package main holds the inital config and startups the whole project.
  */
 package main
 

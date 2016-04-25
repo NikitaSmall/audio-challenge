@@ -1,5 +1,4 @@
-/*
- * This package holds router and hadnlers for its routes.
+/*Package router holds router and hadnlers for its routes.
  * In this file websocket connection handler is declared.
  */
 package router

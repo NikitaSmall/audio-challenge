@@ -134,10 +134,10 @@ func saveTask(t Tasker) (Tasker, error) {
 	return t, tasksCollection.Insert(t)
 }
 
-// TaskList returns list of all the possible tasks.
+// List returns list of all the possible tasks.
 // interface returning value is used for getting mutability and
 // easy way to get different types of tasks.
-func TaskList() (interface{}, error) {
+func List() (interface{}, error) {
 	tasksCollection := config.DB.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
 
 	var tasks []interface{}

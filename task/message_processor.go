@@ -1,5 +1,4 @@
-/*
- * This package holds the main logic. Here tasks are parsed, created, processed.
+/*Package task holds the main logic. Here tasks are parsed, created, processed.
  * This file holds API-specific (Yandex-API currently) functions.
  * Also this file contains main parse functions.
  */

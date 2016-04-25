@@ -1,5 +1,4 @@
-/*
- * This package holds websocket preferences, initialisation and hub initialisation.
+/*Package socket holds websocket preferences, initialisation and hub initialisation.
  * This file holds basic client configs,
  * functions and ways to contact main hub and webclient (browser) via websocket.
  */
@@ -44,7 +43,7 @@ func (c *Client) removeClient() {
 	c.ws.Close()
 }
 
-// function reads info from client's socket
+// ReadPump reads info from client's socket
 func (c *Client) ReadPump() {
 	defer c.removeClient()
 
@@ -71,7 +70,7 @@ func (c *Client) write(messageType int, message []byte) error {
 	return c.ws.WriteMessage(messageType, message)
 }
 
-// function gets messages from client's channel
+// WritePump gets messages from client's channel
 // and can write to client by calling write function
 func (c *Client) WritePump() {
 	ticker := time.NewTicker(pingPeriod)
