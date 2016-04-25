@@ -1,6 +1,26 @@
 # audio-challenge
 Simple web-helper for uawebchallenge. Speak with it and see the task done!
 
+### usual heroku note:
+Because of free heroku node requests can take near 10 seconds. Be patient, please.
+
+### about messages:
+- General advise: speak calm and clearly.
+- To fire `pizza` task you need to start (or your message should contain) words like `закажи пиццу`, `купи пиццу`.
+ Any other tasks or unrecognisable murmuring will be ignored.
+ The recognition engine is pretty good when using general words with good pronounce.
+- To set time you need to say `через два часа` or `завтра`.
+ If you want to complete the task right now you may omit any time words.
+- To set address you need to say `по улице Пушкина, 14` or `проспект Шевченко, 5Б квартира 23`.
+ In case of omitting address (or if you tell it not clearly) just empty message will appear.
+- To set order list you need to name all that you want, e.g. `пицца маргарита` or `пеперони`.
+ Engine is not good with hard to recognise names such as `Madrigaldia` or `Some-unknown-word`.
+ You may see the list of supported and recognisable pizzas at `lists/food.txt`. Other foods will be ignored.
+- To set the target pizzeria you need to pronounce it calm.
+ You may see the list of supported pizzerias at `lists/pizzeria.txt`
+- You may provide your name. For this purpose you may say something like `... на имя Евгения Борисовича Конопатько` or
+ `для Елены Игнатьевны Брудько`. I hope you have recognisable names, but only first name is used for real.
+
 ## Setup:
 Application written in golang. You need to create a `.env` file in order to compile and run the app.
 The paths of inner packages was changed due to stay anonymous member of challenge.

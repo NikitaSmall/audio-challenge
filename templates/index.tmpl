@@ -12,42 +12,43 @@
     <script src="/static/audio.js"></script>
   </head>
   <body>
+    
     <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Audio-Challenge</a>
-    </div>
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Audio-Challenge</a>
+        </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a id="register" href="#" data-toggle="modal" data-target="#modalRegister">
-            Register
-          </a>
-        </li>
-        <li>
-          <a id="login" href="#" data-toggle="modal" data-target="#modalLogin">
-            Login
-          </a>
-        </li>
-        <li>
-          <a id="logout" class="hidden" href="#">
-            Logout
-          </a>
-        </li>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a id="register" href="#" data-toggle="modal" data-target="#modalRegister">
+                Register
+              </a>
+            </li>
+            <li>
+              <a id="login" href="#" data-toggle="modal" data-target="#modalLogin">
+                Login
+              </a>
+            </li>
+            <li>
+              <a id="logout" class="hidden" href="#">
+                Logout
+              </a>
+            </li>
 
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
 
     <div class="container row">
       <div class="col-md-offset-1 col-md-12" id="content">
@@ -58,6 +59,11 @@
             You may press the button and tell your command to application.
             After the telling command press the button second time and wait for result.
           </p>
+          <small>
+            To perform 100% confidence for your phone number you need to register or login.
+            It is easy to do in top right corner.
+            Username will be taken from your message, not from session info.
+          </small>
           <p>
             <div id="recorder" class="btn btn-primary btn-lg" role="button">
               <span>Press and tell the command</span>
