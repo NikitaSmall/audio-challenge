@@ -4,14 +4,19 @@
 package task
 
 import (
+	"bytes"
 	"errors"
+	"fmt"
 	"io"
 	"log"
+	"net/http"
+	"net/url"
 	"os"
 	"time"
 
 	"github.com/nikitasmall/audio-challenge/config"
 	"github.com/nikitasmall/audio-challenge/socket"
+	"github.com/nikitasmall/audio-challenge/util"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -20,11 +25,8 @@ var collectionName = "tasks"
 
 // Tasker is an interface that all the Tasks must implement
 type Tasker interface {
-	id() string
 	process() error
 	changeStatus(status bool)
-
-	Query() string
 }
 
 // BaseTask is a struct to hold rawQuery string and to determinate the task inside the query
@@ -58,7 +60,46 @@ type PizzaTask struct {
 
 // Process does the PizzaTask work: goes for a pizza
 func (pz *PizzaTask) process() error {
+	if pz.PizzeriaName != "" {
+		err := pz.sendPizzaRequest()
+		if err != nil {
+			return err
+		}
+	}
+
 	pz.changeStatus(true)
+	return nil
+}
+
+func (pz PizzaTask) sendPizzaRequest() error {
+	pizzriaUrl := util.FillMap(os.Getenv("PIZZERIA_LIST_FILE"))[pz.PizzeriaName]
+
+	data := url.Values{}
+	data.Set("order[phone]", pz.OrderDetails.Phone)
+	data.Add("order[payment_type]", pz.OrderDetails.PaymentType)
+	data.Add("order[address]", pz.OrderDetails.Address)
+	data.Add("order[name]", pz.OrderDetails.UserName)
+	data.Add("order[order_list]", pz.OrderList)
+
+	r, err := http.NewRequest("POST", pizzriaUrl, bytes.NewBufferString(data.Encode()))
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(r)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	if resp.StatusCode != 200 {
+		message := fmt.Sprintf("Status code isn't 200! It is %d", resp.StatusCode)
+		log.Println(message)
+		return errors.New(message)
+	}
+
 	return nil
 }
 
@@ -71,15 +112,6 @@ func (pz *PizzaTask) changeStatus(status bool) {
 		pz.Status = true
 		socket.MainHub.SendMessage(socket.TaskComplete, pz)
 	}
-}
-
-// Query returns raw query method
-func (pz *PizzaTask) Query() string {
-	return pz.RawQuery
-}
-
-func (pz *PizzaTask) id() string {
-	return pz.ID
 }
 
 // ProcessMessage sends the message file to the Yandex API and returns parsed

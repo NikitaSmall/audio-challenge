@@ -1,1 +1,9 @@
-olio,олио,venezia,пиццерия,pizzeria,простая пицца,usual pizza,итальянский квартал
+olio%https://pizza-order.herokuapp.com/orders
+олио%https://pizza-order.herokuapp.com/orders
+venezia%https://pizza-order.herokuapp.com/orders
+пиццерия%https://pizza-order.herokuapp.com/orders
+pizzeria%https://pizza-order.herokuapp.com/orders
+простая пицца%https://pizza-order.herokuapp.com/orders
+usual pizza%https://pizza-order.herokuapp.com/orders
+итальянский квартал%https://pizza-order.herokuapp.com/orders
+тестовая пицца%https://pizza-order.herokuapp.com/orders

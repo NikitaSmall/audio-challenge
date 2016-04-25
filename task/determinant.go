@@ -35,12 +35,12 @@ func (task BaseTask) determinateTask() string {
 // determinatePizzeria checks for reserved keywords in the provided text
 // and returns the found result (pizzeria name).
 func (task BaseTask) determinatePizzeria() string {
-	pizzeriaList := util.FillList(os.Getenv("PIZZERIA_LIST_FILE"))
+	pizzeriaMap := util.FillMap(os.Getenv("PIZZERIA_LIST_FILE"))
 
-	for _, pizzeria := range pizzeriaList {
+	for pizzeriaName := range pizzeriaMap {
 
-		if strings.Contains(task.RawQuery, pizzeria) {
-			return pizzeria
+		if strings.Contains(task.RawQuery, pizzeriaName) {
+			return pizzeriaName
 		}
 	}
 
