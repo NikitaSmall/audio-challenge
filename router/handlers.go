@@ -39,8 +39,8 @@ func messageUploadHandler(c *gin.Context) {
 	if err != nil {
 		log.Print(err)
 	}
-
-	t, err := task.ProcessMessage(messageFile)
+	phone, _ := getSessionPhone(c)
+	t, err := task.ProcessMessage(phone, messageFile)
 
 	if err != nil {
 		c.String(http.StatusBadRequest, err.Error())

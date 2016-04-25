@@ -12,6 +12,43 @@
     <script src="/static/audio.js"></script>
   </head>
   <body>
+    <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Audio-Challenge</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a id="register" href="#" data-toggle="modal" data-target="#modalRegister">
+            Register
+          </a>
+        </li>
+        <li>
+          <a id="login" href="#" data-toggle="modal" data-target="#modalLogin">
+            Login
+          </a>
+        </li>
+        <li>
+          <a id="logout" class="hidden" href="#">
+            Logout
+          </a>
+        </li>
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
     <div class="container row">
       <div class="col-md-offset-1 col-md-12" id="content">
 
@@ -38,6 +75,7 @@
               <th>Time to start task</th>
               <th>UserName</th>
               <th>Address</th>
+              <th>Phone</th>
               <th>Cash/Terminal</th>
               <th>Order list</th>
               <th>Pizzeria name</th>
@@ -45,11 +83,64 @@
             </tr>
           </thead>
           <tbody>
-            
+
           </tbody>
         </table>
       </div>
     </div>
+
+    <div id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 id="modalRegisterLabel" class="modal-title">Register</h4>
+      </div>
+      <div class="modal-body">
+        <form id="registerForm" role="form">
+          <div class="form-group">
+            <label for="usernameRegister">Username</label>
+            <input id="usernameRegister" type="text" placeholder="Enter username" autocomplete="false" minlength="2" maxlength="24" required="true" class="form-control"/>
+          </div>
+          <div class="form-group">
+            <label for="phoneRegister">Phone</label>
+            <input id="phoneRegister" type="phone" placeholder="Enter phone" autocomplete="false" minlength="2" maxlength="24" required="true" class="form-control"/>
+          </div>
+          <div class="form-group">
+            <label for="passwordRegister">
+              Password
+            </label>
+            <input id="passwordRegister" type="password" placeholder="Password" autocomplete="false" required="true" minlength="5" class="form-control"/>
+          </div>
+          <input type="submit" value="Submit" class="btn btn-primary"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 id="modalRegisterLabel" class="modal-title">Register</h4>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm" role="form">
+          <div class="form-group">
+            <label for="usernameLogin">Username</label>
+            <input id="usernameLogin" type="text" placeholder="Enter username" autocomplete="false" minlength="2" maxlength="24" required="true" class="form-control"/>
+          </div>
+          <div class="form-group">
+            <label for="passwordLogin">Password</label>
+            <input id="passwordLogin" type="password" placeholder="Password" autocomplete="false" required="true" minlength="5" class="form-control"/>
+          </div>
+          <input type="submit" value="Submit" class="btn btn-primary"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
     <script src="/static/loader/jquery.loader.min.js"></script>
 

@@ -20,6 +20,11 @@ func CreateRouter() *gin.Engine {
 
 	router.POST("/message", messageUploadHandler)
 
+	router.GET("/user", checkUser)
+	router.POST("/register", register)
+	router.POST("/login", login)
+	router.DELETE("/logout", logout)
+
 	go socket.MainHub.Run()
 	router.GET("/socket", hubHandler)
 

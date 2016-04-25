@@ -84,7 +84,7 @@ func (pz *PizzaTask) id() string {
 
 // ProcessMessage sends the message file to the Yandex API and returns parsed
 // task as an interface type Tasker.
-func ProcessMessage(message io.Reader) (Tasker, error) {
+func ProcessMessage(phone string, message io.Reader) (Tasker, error) {
 	parsedResult := messageRequest(message)
 
 	t, err := newTask(parsedResult)
@@ -92,7 +92,7 @@ func ProcessMessage(message io.Reader) (Tasker, error) {
 		return nil, err
 	}
 
-	task, err := t.defineTask()
+	task, err := t.defineTask(phone)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func ProcessMessage(message io.Reader) (Tasker, error) {
 }
 
 // defineTask defines type of a task by RawQuery field.
-func (task *BaseTask) defineTask() (Tasker, error) {
+func (task *BaseTask) defineTask(phone string) (Tasker, error) {
 	taskType := task.determinateTask()
 
 	name, addr, date := task.getQueryParams()
@@ -117,6 +117,7 @@ func (task *BaseTask) defineTask() (Tasker, error) {
 			Command:      "pizza",
 			Time:         date,
 			OrderDetails: OrderDetails{
+				Phone:       phone,
 				UserName:    name,
 				Address:     addr,
 				PaymentType: task.determinatePaymentType(),

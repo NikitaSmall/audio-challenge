@@ -33,6 +33,80 @@ $(document).ready(function() {
     });
   });
 
+  $.ajax({
+    method: 'GET',
+    url: '/user',
+    contentType: "application/json; charset=utf-8"
+  }).done(function(data) {
+    if (data.username != null) {
+      toggleAuthButtons();
+    }
+  });
+
+  $('#logout').click(function(e) {
+    e.preventDefault();
+
+    $.ajax({
+      method: 'DELETE',
+      url: '/logout',
+      contentType: "application/json; charset=utf-8"
+    }).done(function(data) {
+      if (data.message.length > 0) {
+        toggleAuthButtons();
+      }
+    }).fail(function(data, textStatus, errorThrown) {
+    });
+  })
+
+  $("#loginForm").unbind("submit");
+  $('#loginForm').submit(function(e) {
+    var me = $(this);
+    e.preventDefault();
+
+    var username = $('#usernameLogin').val();
+    var password = $('#passwordLogin').val();
+
+    $.ajax({
+      method: 'POST',
+      url: '/login',
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({ "username": username, "password": password, "phone": 'phone' }),
+      complete: function() {
+            me.data('requestRunning', false);
+        }
+    }).done(function(data) {
+      toggleAuthButtons();
+      $('#modalLogin').modal('hide');
+    }).fail(function(data, textStatus, errorThrown) {
+      $('#modalLogin').modal('hide');
+    });
+  });
+
+  $("#registerForm").unbind("submit");
+  $('#registerForm').submit(function(e) {
+    var me = $(this);
+    e.preventDefault();
+
+    var username = $('#usernameRegister').val();
+    var password = $('#passwordRegister').val();
+    var phone = $('#phoneRegister').val();
+
+    $.ajax({
+      method: 'POST',
+      url: '/register',
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({ "username": username, "password": password, "phone": phone }),
+      complete: function() {
+            me.data('requestRunning', false);
+        }
+    }).done(function(data) {
+      toggleAuthButtons();
+      $('#modalRegister').modal('hide');
+    }).fail(function(data, textStatus, errorThrown) {
+      $('#modalRegister').modal('hide');
+    });
+  });
+
 });
 
 function addTask(taskTable, task) {
@@ -42,6 +116,7 @@ function addTask(taskTable, task) {
     '<td>' + task.time + '</td>' +
     '<td>' + task.orderdetails.username + '</td>' +
     '<td>' + task.orderdetails.address + '</td>' +
+    '<td>' + task.orderdetails.phone + '</td>' +
     '<td>' + task.orderdetails.paymenttype + '</td>' +
     '<td>' + task.orderlist + '</td>' +
     '<td>' + task.pizzerianame + '</td>' +
@@ -77,4 +152,10 @@ function getCurrentUrl() {
   }
 
   return url;
+}
+
+function toggleAuthButtons() {
+  $('#register').toggleClass('hidden');
+  $('#login').toggleClass('hidden');
+  $('#logout').toggleClass('hidden');
 }
