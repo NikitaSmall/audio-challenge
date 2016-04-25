@@ -13,6 +13,7 @@ import (
 
 func init() {
 	config.InitEnv(".env")
+	config.Connect()
 }
 
 func main() {

@@ -1,5 +1,4 @@
-/*
- * This package holds the main logic. Here tasks are parsed, created, processed.
+/*Package task holds the main logic. Here tasks are parsed, created, processed.
  * This file holds main declarations and some main task methods.
  */
 package task
@@ -44,7 +43,7 @@ type OrderDetails struct {
 
 // PizzaTask is a struct to perform pizza requests
 type PizzaTask struct {
-	Id string `json:"id" bson:"_id,omitempty"`
+	ID string `json:"id" bson:"_id,omitempty"`
 
 	RawQuery string
 	Command  string `json:"command"`
@@ -64,11 +63,8 @@ func (pz *PizzaTask) process() error {
 }
 
 func (pz *PizzaTask) changeStatus(status bool) {
-	session := config.Connect()
-	defer session.Close()
-
-	tasksCollection := session.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
-	err := tasksCollection.Update(bson.M{"_id": pz.Id}, bson.M{"$set": bson.M{"status": status}})
+	tasksCollection := config.DB.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
+	err := tasksCollection.Update(bson.M{"_id": pz.ID}, bson.M{"$set": bson.M{"status": status}})
 	if err != nil {
 		log.Printf("Error on changing tasks status: %s", err.Error())
 	} else {
@@ -83,7 +79,7 @@ func (pz *PizzaTask) Query() string {
 }
 
 func (pz *PizzaTask) id() string {
-	return pz.Id
+	return pz.ID
 }
 
 // ProcessMessage sends the message file to the Yandex API and returns parsed
@@ -113,7 +109,7 @@ func (task *BaseTask) defineTask() (Tasker, error) {
 	switch taskType {
 	case "pizza":
 		return &PizzaTask{
-			Id:           bson.NewObjectId().Hex(),
+			ID:           bson.NewObjectId().Hex(),
 			RawQuery:     task.RawQuery,
 			Status:       task.Status,
 			OrderList:    task.determinateFood(),
@@ -133,10 +129,7 @@ func (task *BaseTask) defineTask() (Tasker, error) {
 
 // saveTask stores sucessfully parsed task to mongo collection
 func saveTask(t Tasker) (Tasker, error) {
-	session := config.Connect()
-	defer session.Close()
-
-	tasksCollection := session.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
+	tasksCollection := config.DB.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
 	return t, tasksCollection.Insert(t)
 }
 
@@ -144,13 +137,14 @@ func saveTask(t Tasker) (Tasker, error) {
 // interface returning value is used for getting mutability and
 // easy way to get different types of tasks.
 func TaskList() (interface{}, error) {
-	session := config.Connect()
-	defer session.Close()
-
-	tasksCollection := session.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
+	tasksCollection := config.DB.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
 
 	var tasks []interface{}
 
 	err := tasksCollection.Find(nil).All(&tasks)
+	if err != nil {
+		log.Print(err)
+	}
+
 	return tasks, err
 }

@@ -62,10 +62,7 @@ func (processor *Processor) Start() {
 // getUndoneTask returns single undone task which taskProcessor is triyng to process
 // and complete.
 func getUndoneTask(taskType string) (Tasker, error) {
-	session := config.Connect()
-	defer session.Close()
-
-	tasksCollection := session.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
+	tasksCollection := config.DB.DB(os.Getenv("MONGO_DB_NAME")).C(collectionName)
 
 	switch taskType {
 	case "pizza":
