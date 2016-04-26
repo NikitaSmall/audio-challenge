@@ -128,7 +128,6 @@ func ProcessMessage(phone string, message io.Reader) (Tasker, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer task.process()
 
 	return saveTask(task)
 }
