@@ -22,14 +22,14 @@ var localStorage = sessions.NewCookieStore([]byte(os.Getenv("SESSION_KEY")))
 func setSessionUser(username string, phone string, c *gin.Context) {
 	session, err := localStorage.Get(c.Request, "auth")
 	if err != nil {
-		log.Panic("Cannot obtain session. ", err.Error())
+		log.Println("Cannot obtain session. ", err.Error())
 	}
 
 	session.Values["username"] = username
 	session.Values["phone"] = phone
 	err = session.Save(c.Request, c.Writer)
 	if err != nil {
-		log.Panic("Cannot save session. ", err.Error())
+		log.Println("Cannot save session. ", err.Error())
 	}
 }
 
@@ -39,7 +39,7 @@ func setSessionUser(username string, phone string, c *gin.Context) {
 func getSessionPhone(c *gin.Context) (string, error) {
 	session, err := localStorage.Get(c.Request, "auth")
 	if err != nil {
-		log.Panic("Cannot obtain session. ", err.Error())
+		log.Println("Cannot obtain session. ", err.Error())
 	}
 
 	phone := session.Values["phone"]
@@ -56,7 +56,7 @@ func getSessionPhone(c *gin.Context) (string, error) {
 func getSessionUser(c *gin.Context) (string, error) {
 	session, err := localStorage.Get(c.Request, "auth")
 	if err != nil {
-		log.Panic("Cannot obtain session. ", err.Error())
+		log.Println("Cannot obtain session. ", err.Error())
 	}
 
 	username := session.Values["username"]
@@ -124,7 +124,7 @@ func login(c *gin.Context) {
 func logout(c *gin.Context) {
 	session, err := localStorage.Get(c.Request, "auth")
 	if err != nil {
-		log.Panic("Cannot obtain session. ", err.Error())
+		log.Println("Cannot obtain session. ", err.Error())
 	}
 
 	delete(session.Values, "username")
