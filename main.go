@@ -20,5 +20,5 @@ func main() {
 	taskProcessor := task.NewProcessor()
 	go taskProcessor.Start()
 
-	r.Run(":3000")
+	r.Run()
 }
