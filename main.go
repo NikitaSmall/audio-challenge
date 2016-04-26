@@ -3,8 +3,6 @@
 package main
 
 import (
-	"os"
-
 	"github.com/nikitasmall/audio-challenge/config"
 	"github.com/nikitasmall/audio-challenge/router"
 	"github.com/nikitasmall/audio-challenge/task"
@@ -22,5 +20,5 @@ func main() {
 	taskProcessor := task.NewProcessor()
 	go taskProcessor.Start()
 
-	r.Run(os.Getenv("PORT"))
+	r.Run(":3000")
 }
