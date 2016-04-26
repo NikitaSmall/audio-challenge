@@ -9,7 +9,7 @@ Because of free heroku node requests can take near 10 seconds. Be patient, pleas
 - To fire `pizza` task you need to start (or your message should contain) words like `закажи пиццу`, `купи пиццу`.
  Any other tasks or unrecognisable murmuring will be ignored.
  The recognition engine is pretty good when using general words with good pronounce.
-- To set time you need to say `через два часа` or `завтра`.
+- To set time you need to say `через два часа` or `завтра` or even `двадцать пятого мая`.
  If you want to complete the task right now you may omit any time words.
 - To set address you need to say `по улице Пушкина, 14` or `проспект Шевченко, 5Б квартира 23`.
  In case of omitting address (or if you tell it not clearly) just empty message will appear.
