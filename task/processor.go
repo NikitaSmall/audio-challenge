@@ -40,6 +40,8 @@ func NewProcessor() *Processor {
 func (processor *Processor) Start() {
 	for {
 		for _, taskType := range processor.taskTypes {
+			time.Sleep(3000 * time.Millisecond)
+
 			task, err := getUndoneTask(taskType)
 			if err != nil {
 				// this spams a lot
