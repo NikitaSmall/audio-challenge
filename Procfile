@@ -1,1 +1,1 @@
-web: sh startup.sh
+web: audio-challenge
