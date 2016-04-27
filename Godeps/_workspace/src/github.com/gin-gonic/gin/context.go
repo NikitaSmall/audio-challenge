@@ -8,16 +8,14 @@ import (
 	"errors"
 	"io"
 	"math"
-	"net"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
-	"github.com/gin-gonic/gin/binding"
-	"github.com/gin-gonic/gin/render"
-	"github.com/manucorporat/sse"
-	"golang.org/x/net/context"
+	"github.com/nikitasmall/audio-challenge/Godeps/_workspace/src/github.com/gin-gonic/gin/binding"
+	"github.com/nikitasmall/audio-challenge/Godeps/_workspace/src/github.com/gin-gonic/gin/render"
+	"github.com/nikitasmall/audio-challenge/Godeps/_workspace/src/github.com/manucorporat/sse"
+	"github.com/nikitasmall/audio-challenge/Godeps/_workspace/src/golang.org/x/net/context"
 )
 
 // Content-Type MIME of the most common data formats
@@ -103,10 +101,10 @@ func (c *Context) IsAborted() bool {
 	return c.index >= abortIndex
 }
 
-// Abort prevents pending handlers from being called. Note that this will not stop the current handler.
-// Let's say you have an authorization middleware that validates that the current request is authorized. If the
-// authorization fails (ex: the password does not match), call Abort to ensure the remaining handlers
-// for this request are not called.
+// Abort stops the system to continue calling the pending handlers in the chain.
+// Let's say you have an authorization middleware that validates if the request is authorized
+// if the authorization fails (the password does not match). This method (Abort()) should be called
+// in order to stop the execution of the actual handler.
 func (c *Context) Abort() {
 	c.index = abortIndex
 }
@@ -114,7 +112,7 @@ func (c *Context) Abort() {
 // AbortWithStatus calls `Abort()` and writes the headers with the specified status code.
 // For example, a failed attempt to authentificate a request could use: context.AbortWithStatus(401).
 func (c *Context) AbortWithStatus(code int) {
-	c.Status(code)
+	c.Writer.WriteHeader(code)
 	c.Abort()
 }
 
@@ -183,52 +181,50 @@ func (c *Context) MustGet(key string) interface{} {
 /************ INPUT DATA ************/
 /************************************/
 
-// Param returns the value of the URL param.
-// It is a shortcut for c.Params.ByName(key)
-//		router.GET("/user/:id", func(c *gin.Context) {
-//			// a GET request to /user/john
-//			id := c.Param("id") // id == "john"
-//		})
+// Query is a shortcut for c.Request.URL.Query().Get(key)
+// It is used to return the url query values.
+// ?id=1234&name=Manu
+// c.Query("id") == "1234"
+// c.Query("name") == "Manu"
+// c.Query("wtf") == ""
+func (c *Context) Query(key string) (va string) {
+	va, _ = c.query(key)
+	return
+}
+
+// PostForm is a shortcut for c.Request.PostFormValue(key)
+func (c *Context) PostForm(key string) (va string) {
+	va, _ = c.postForm(key)
+	return
+}
+
+// Param is a shortcut for c.Params.ByName(key)
 func (c *Context) Param(key string) string {
 	return c.Params.ByName(key)
 }
 
-// Query returns the keyed url query value if it exists,
-// othewise it returns an empty string `("")`.
-// It is shortcut for `c.Request.URL.Query().Get(key)`
-// 		GET /path?id=1234&name=Manu&value=
-// 		c.Query("id") == "1234"
-// 		c.Query("name") == "Manu"
-// 		c.Query("value") == ""
-// 		c.Query("wtf") == ""
-func (c *Context) Query(key string) string {
-	value, _ := c.GetQuery(key)
-	return value
-}
-
-// DefaultQuery returns the keyed url query value if it exists,
-// othewise it returns the specified defaultValue string.
-// See: Query() and GetQuery() for further information.
-// 		GET /?name=Manu&lastname=
-// 		c.DefaultQuery("name", "unknown") == "Manu"
-// 		c.DefaultQuery("id", "none") == "none"
-// 		c.DefaultQuery("lastname", "none") == ""
-func (c *Context) DefaultQuery(key, defaultValue string) string {
-	if value, ok := c.GetQuery(key); ok {
-		return value
+func (c *Context) DefaultPostForm(key, defaultValue string) string {
+	if va, ok := c.postForm(key); ok {
+		return va
 	}
 	return defaultValue
 }
 
-// GetQuery is like Query(), it returns the keyed url query value
-// if it exists `(value, true)` (even when the value is an empty string),
-// othewise it returns `("", false)`.
-// It is shortcut for `c.Request.URL.Query().Get(key)`
-// 		GET /?name=Manu&lastname=
-// 		("Manu", true) == c.GetQuery("name")
-// 		("", false) == c.GetQuery("id")
-// 		("", true) == c.GetQuery("lastname")
-func (c *Context) GetQuery(key string) (string, bool) {
+// DefaultQuery returns the keyed url query value if it exists, othewise it returns the
+// specified defaultValue.
+// ```
+// /?name=Manu
+// c.DefaultQuery("name", "unknown") == "Manu"
+// c.DefaultQuery("id", "none") == "none"
+// ```
+func (c *Context) DefaultQuery(key, defaultValue string) string {
+	if va, ok := c.query(key); ok {
+		return va
+	}
+	return defaultValue
+}
+
+func (c *Context) query(key string) (string, bool) {
 	req := c.Request
 	if values, ok := req.URL.Query()[key]; ok && len(values) > 0 {
 		return values[0], true
@@ -236,31 +232,7 @@ func (c *Context) GetQuery(key string) (string, bool) {
 	return "", false
 }
 
-// PostForm returns the specified key from a POST urlencoded form or multipart form
-// when it exists, otherwise it returns an empty string `("")`.
-func (c *Context) PostForm(key string) string {
-	value, _ := c.GetPostForm(key)
-	return value
-}
-
-// PostForm returns the specified key from a POST urlencoded form or multipart form
-// when it exists, otherwise it returns the specified defaultValue string.
-// See: PostForm() and GetPostForm() for further information.
-func (c *Context) DefaultPostForm(key, defaultValue string) string {
-	if value, ok := c.GetPostForm(key); ok {
-		return value
-	}
-	return defaultValue
-}
-
-// GetPostForm is like PostForm(key). It returns the specified key from a POST urlencoded
-// form or multipart form when it exists `(value, true)` (even when the value is an empty string),
-// otherwise it returns ("", false).
-// For example, during a PATCH request to update the user's email:
-// 		email=mail@example.com  -->  ("mail@example.com", true) := GetPostForm("email") // set email to "mail@example.com"
-// 		email=  			  	-->  ("", true) := GetPostForm("email") // set email to ""
-//							 	-->  ("", false) := GetPostForm("email") // do nothing with email
-func (c *Context) GetPostForm(key string) (string, bool) {
+func (c *Context) postForm(key string) (string, bool) {
 	req := c.Request
 	req.ParseMultipartForm(32 << 20) // 32 MB
 	if values := req.PostForm[key]; len(values) > 0 {
@@ -276,8 +248,8 @@ func (c *Context) GetPostForm(key string) (string, bool) {
 
 // Bind checks the Content-Type to select a binding engine automatically,
 // Depending the "Content-Type" header different bindings are used:
-// 		"application/json" --> JSON binding
-// 		"application/xml"  --> XML binding
+// "application/json" --> JSON binding
+// "application/xml"  --> XML binding
 // otherwise --> returns an error
 // If Parses the request's body as JSON if Content-Type == "application/json" using JSON or XML  as a JSON input.
 // It decodes the json payload into the struct specified as a pointer.
@@ -319,10 +291,7 @@ func (c *Context) ClientIP() string {
 			return clientIP
 		}
 	}
-	if ip, _, err := net.SplitHostPort(strings.TrimSpace(c.Request.RemoteAddr)); err == nil {
-		return ip
-	}
-	return ""
+	return strings.TrimSpace(c.Request.RemoteAddr)
 }
 
 // ContentType returns the Content-Type header of the request.
@@ -341,10 +310,6 @@ func (c *Context) requestHeader(key string) string {
 /******** RESPONSE RENDERING ********/
 /************************************/
 
-func (c *Context) Status(code int) {
-	c.writermem.WriteHeader(code)
-}
-
 // Header is a intelligent shortcut for c.Writer.Header().Set(key, value)
 // It writes a header in the response.
 // If value == "", this method removes the header `c.Writer.Header().Del(key)`
@@ -356,43 +321,16 @@ func (c *Context) Header(key, value string) {
 	}
 }
 
-func (c *Context) SetCookie(
-	name string,
-	value string,
-	maxAge int,
-	path string,
-	domain string,
-	secure bool,
-	httpOnly bool,
-) {
-	if path == "" {
-		path = "/"
-	}
-	http.SetCookie(c.Writer, &http.Cookie{
-		Name:     name,
-		Value:    url.QueryEscape(value),
-		MaxAge:   maxAge,
-		Path:     path,
-		Domain:   domain,
-		Secure:   secure,
-		HttpOnly: httpOnly,
-	})
-}
-
-func (c *Context) Cookie(name string) (string, error) {
-	cookie, err := c.Request.Cookie(name)
-	if err != nil {
-		return "", err
-	}
-	val, _ := url.QueryUnescape(cookie.Value)
-	return val, nil
-}
-
 func (c *Context) Render(code int, r render.Render) {
-	c.Status(code)
+	c.writermem.WriteHeader(code)
 	if err := r.Render(c.Writer); err != nil {
-		panic(err)
+		c.renderError(err)
 	}
+}
+
+func (c *Context) renderError(err error) {
+	debugPrintError(err)
+	c.AbortWithError(500, err).SetType(ErrorTypeRender)
 }
 
 // HTML renders the HTTP template specified by its file name.
@@ -414,9 +352,9 @@ func (c *Context) IndentedJSON(code int, obj interface{}) {
 // JSON serializes the given struct as JSON into the response body.
 // It also sets the Content-Type as "application/json".
 func (c *Context) JSON(code int, obj interface{}) {
-	c.Status(code)
+	c.writermem.WriteHeader(code)
 	if err := render.WriteJSON(c.Writer, obj); err != nil {
-		panic(err)
+		c.renderError(err)
 	}
 }
 
@@ -428,7 +366,7 @@ func (c *Context) XML(code int, obj interface{}) {
 
 // String writes the given string into the response body.
 func (c *Context) String(code int, format string, values ...interface{}) {
-	c.Status(code)
+	c.writermem.WriteHeader(code)
 	render.WriteString(c.Writer, format, values)
 }
 
@@ -470,9 +408,9 @@ func (c *Context) Stream(step func(w io.Writer) bool) {
 		case <-clientGone:
 			return
 		default:
-			keepOpen := step(w)
+			keepopen := step(w)
 			w.Flush()
-			if !keepOpen {
+			if !keepopen {
 				return
 			}
 		}
@@ -512,8 +450,9 @@ func (c *Context) Negotiate(code int, config Negotiate) {
 }
 
 func (c *Context) NegotiateFormat(offered ...string) string {
-	assert1(len(offered) > 0, "you must provide at least one offer")
-
+	if len(offered) == 0 {
+		panic("you must provide at least one offer")
+	}
 	if c.Accepted == nil {
 		c.Accepted = parseAccept(c.requestHeader("Accept"))
 	}

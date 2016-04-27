@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/elgs/gosplitargs"
+	"github.com/nikitasmall/audio-challenge/Godeps/_workspace/src/github.com/elgs/gosplitargs"
 )
 
 // JQ (JSON Query) struct

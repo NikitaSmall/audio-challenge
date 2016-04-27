@@ -99,66 +99,7 @@ type CloseError struct {
 }
 
 func (e *CloseError) Error() string {
-	s := []byte("websocket: close ")
-	s = strconv.AppendInt(s, int64(e.Code), 10)
-	switch e.Code {
-	case CloseNormalClosure:
-		s = append(s, " (normal)"...)
-	case CloseGoingAway:
-		s = append(s, " (going away)"...)
-	case CloseProtocolError:
-		s = append(s, " (protocol error)"...)
-	case CloseUnsupportedData:
-		s = append(s, " (unsupported data)"...)
-	case CloseNoStatusReceived:
-		s = append(s, " (no status)"...)
-	case CloseAbnormalClosure:
-		s = append(s, " (abnormal closure)"...)
-	case CloseInvalidFramePayloadData:
-		s = append(s, " (invalid payload data)"...)
-	case ClosePolicyViolation:
-		s = append(s, " (policy violation)"...)
-	case CloseMessageTooBig:
-		s = append(s, " (message too big)"...)
-	case CloseMandatoryExtension:
-		s = append(s, " (mandatory extension missing)"...)
-	case CloseInternalServerErr:
-		s = append(s, " (internal server error)"...)
-	case CloseTLSHandshake:
-		s = append(s, " (TLS handshake error)"...)
-	}
-	if e.Text != "" {
-		s = append(s, ": "...)
-		s = append(s, e.Text...)
-	}
-	return string(s)
-}
-
-// IsCloseError returns boolean indicating whether the error is a *CloseError
-// with one of the specified codes.
-func IsCloseError(err error, codes ...int) bool {
-	if e, ok := err.(*CloseError); ok {
-		for _, code := range codes {
-			if e.Code == code {
-				return true
-			}
-		}
-	}
-	return false
-}
-
-// IsUnexpectedCloseError returns boolean indicating whether the error is a
-// *CloseError with a code not in the list of expected codes.
-func IsUnexpectedCloseError(err error, expectedCodes ...int) bool {
-	if e, ok := err.(*CloseError); ok {
-		for _, code := range expectedCodes {
-			if e.Code == code {
-				return false
-			}
-		}
-		return true
-	}
-	return false
+	return "websocket: close " + strconv.Itoa(e.Code) + " " + e.Text
 }
 
 var (
@@ -367,6 +308,9 @@ func (c *Conn) WriteControl(messageType int, data []byte, deadline time.Time) er
 //
 // There can be at most one open writer on a connection. NextWriter closes the
 // previous writer if the application has not already done so.
+//
+// The NextWriter method and the writers returned from the method cannot be
+// accessed by more than one goroutine at a time.
 func (c *Conn) NextWriter(messageType int) (io.WriteCloser, error) {
 	if c.writeErr != nil {
 		return nil, c.writeErr
@@ -750,9 +694,8 @@ func (c *Conn) handleProtocolError(message string) error {
 // There can be at most one open reader on a connection. NextReader discards
 // the previous message if the application has not already consumed it.
 //
-// Errors returned from NextReader are permanent. If NextReader returns a
-// non-nil error, then all subsequent calls to NextReader return the same
-// error.
+// The NextReader method and the readers returned from the method cannot be
+// accessed by more than one goroutine at a time.
 func (c *Conn) NextReader() (messageType int, r io.Reader, err error) {
 
 	c.readSeq++

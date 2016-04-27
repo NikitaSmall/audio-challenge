@@ -35,7 +35,7 @@ import (
 	"sync"
 	"time"
 
-	"gopkg.in/mgo.v2/bson"
+	"github.com/nikitasmall/audio-challenge/Godeps/_workspace/src/gopkg.in/mgo.v2/bson"
 )
 
 // ---------------------------------------------------------------------------

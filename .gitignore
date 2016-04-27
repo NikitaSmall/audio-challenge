@@ -29,4 +29,5 @@ _testmain.go
 debug
 
 .env
+.vagrant
 static/message.wav

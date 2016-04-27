@@ -13,7 +13,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/gorilla/securecookie"
+	"github.com/nikitasmall/audio-challenge/Godeps/_workspace/src/github.com/gorilla/securecookie"
 )
 
 // Store is an interface for custom session stores.
@@ -156,7 +156,7 @@ func NewFilesystemStore(path string, keyPairs ...[]byte) *FilesystemStore {
 
 // FilesystemStore stores sessions in the filesystem.
 //
-// It also serves as a reference for custom stores.
+// It also serves as a referece for custom stores.
 //
 // This store is still experimental and not well tested. Feedback is welcome.
 type FilesystemStore struct {

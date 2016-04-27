@@ -13,44 +13,46 @@
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin",
-			"Comment": "v1.0rc1-219-g3d002e3",
-			"Rev": "3d002e382355cafc15d706b92899b1961d5b79e9"
+			"Comment": "v1.0rc1-148-g52fcc5d",
+			"Rev": "52fcc5dbf6e94df33ad313858fb94b713e9d1b4a"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin/binding",
-			"Comment": "v1.0rc1-219-g3d002e3",
-			"Rev": "3d002e382355cafc15d706b92899b1961d5b79e9"
+			"Comment": "v1.0rc1-148-g52fcc5d",
+			"Rev": "52fcc5dbf6e94df33ad313858fb94b713e9d1b4a"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin/render",
-			"Comment": "v1.0rc1-219-g3d002e3",
-			"Rev": "3d002e382355cafc15d706b92899b1961d5b79e9"
-		},
-		{
-			"ImportPath": "github.com/golang/protobuf/proto",
-			"Rev": "45bba206dd5270d96bac4942dcfe515726613249"
+			"Comment": "v1.0rc1-148-g52fcc5d",
+			"Rev": "52fcc5dbf6e94df33ad313858fb94b713e9d1b4a"
 		},
 		{
 			"ImportPath": "github.com/gorilla/context",
-			"Comment": "v1.1-2-ga8d44e7",
-			"Rev": "a8d44e7d8e4d532b6a27a02dd82abb31cc1b01bd"
+			"Rev": "1c83b3eabd45b6d76072b66b746c20815fb2872d"
 		},
 		{
 			"ImportPath": "github.com/gorilla/securecookie",
-			"Comment": "v1.1",
-			"Rev": "667fe4e3466a040b780561fe9b51a83a3753eefc"
+			"Rev": "e95799a481bbcc3d01c2ad5178524cb8bec9f370"
 		},
 		{
 			"ImportPath": "github.com/gorilla/sessions",
-			"Rev": "a1216e0aed834aa9074063dd4085f5c3df8d1fab"
+			"Rev": "99b16d2edd22458c541b3640ce83689b08a05c20"
 		},
 		{
 			"ImportPath": "github.com/gorilla/websocket",
-			"Rev": "234959944d9cf05229b02e8b386e5cffe1e4e04a"
+			"Rev": "3986be78bf859e01f01af631ad76da5b269d270c"
 		},
 		{
 			"ImportPath": "github.com/manucorporat/sse",
-			"Rev": "ee05b128a739a0fb76c7ebd3ae4810c1de808d6d"
+			"Rev": "fe6ea2c8e398672518ef204bf0fbd9af858d0e15"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-colorable",
+			"Rev": "9fdad7c47650b7d2e1da50644c1f4ba7f172f252"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-isatty",
+			"Rev": "56b76bdf51f7708750eac80fa38b952bb9f32639"
 		},
 		{
 			"ImportPath": "github.com/subosito/gotenv",
@@ -59,12 +61,16 @@
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",
-			"Rev": "2e9cee70ee697e0a2ef894b560dda50dec7dff58"
+			"Rev": "5d0a0f8cd486626821d2ba44d471ab1c9271d38f"
 		},
 		{
-			"ImportPath": "gopkg.in/go-playground/validator.v8",
-			"Comment": "v8.15.1",
-			"Rev": "c193cecd124b5cc722d7ee5538e945bdb3348435"
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "324e1375807370c3934e14f3a97e7d160832f6b4"
+		},
+		{
+			"ImportPath": "gopkg.in/bluesuncorp/validator.v5",
+			"Comment": "v5.12",
+			"Rev": "d5acf1dac43705f8bfbb71d878e290e2bed3950b"
 		},
 		{
 			"ImportPath": "gopkg.in/mgo.v2",
