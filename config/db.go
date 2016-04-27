@@ -18,7 +18,8 @@ var DB *mgo.Session
 func Connect() {
 	uri := os.Getenv("MONGO_CONNECTION_URL")
 
-	session, err := mgo.DialWithTimeout(uri, time.Duration(1000)*time.Millisecond)
+	session, err := mgo.Dial(uri)
+	session.SetSocketTimeout(1 * time.Hour)
 	if err != nil {
 		log.Panic("Error on db connection! ", err.Error())
 	}

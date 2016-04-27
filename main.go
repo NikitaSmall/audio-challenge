@@ -14,6 +14,8 @@ func init() {
 }
 
 func main() {
+	defer config.DB.Close()
+
 	r := router.CreateRouter()
 
 	// setup and run task processor in goroutine
