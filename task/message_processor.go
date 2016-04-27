@@ -45,6 +45,7 @@ func messageRequest(message io.Reader) []byte {
 // messageRequest sends a request to break text to logical blocks,
 // such as date, names, addresses. Returns raw response body.
 func paramsRequest(text string) []byte {
+	time.Sleep(1500 * time.Millisecond)
 	url := fmt.Sprintf("%s/?key=%s&text=%s&layers=Fio,GeoAddr,Date",
 		os.Getenv("YANDEX_MARKUP_URL"),
 		os.Getenv("YANDEX_SPEECH_API_KEY"),

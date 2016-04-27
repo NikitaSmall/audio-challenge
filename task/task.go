@@ -72,7 +72,7 @@ func (pz *PizzaTask) process() error {
 }
 
 func (pz PizzaTask) sendPizzaRequest() error {
-	pizzriaUrl := util.FillMap(os.Getenv("PIZZERIA_LIST_FILE"))[pz.PizzeriaName]
+	pizzeriaURL := util.FillMap(os.Getenv("PIZZERIA_LIST_FILE"))[pz.PizzeriaName]
 
 	data := url.Values{}
 	data.Set("order[phone]", pz.OrderDetails.Phone)
@@ -81,7 +81,7 @@ func (pz PizzaTask) sendPizzaRequest() error {
 	data.Add("order[name]", pz.OrderDetails.UserName)
 	data.Add("order[order_list]", pz.OrderList)
 
-	r, err := http.NewRequest("POST", pizzriaUrl, bytes.NewBufferString(data.Encode()))
+	r, err := http.NewRequest("POST", pizzeriaURL, bytes.NewBufferString(data.Encode()))
 	if err != nil {
 		log.Println(err)
 		return err
