@@ -54,7 +54,8 @@ $(document).ready(function() {
         contentType: false,
         processData: false
       }).fail(function(data) {
-        alert(data.responseText);
+        var error = data.responseText || 'Yandex speech API has bounds in 20 seconds of record. Please, speak faster.';
+        alert(error);
       }).always(function() {
         $("#main-recorder").loader('hide');
       });
