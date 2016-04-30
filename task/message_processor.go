@@ -33,6 +33,7 @@ func messageRequest(message io.Reader) []byte {
 	if err != nil {
 		log.Panic(err)
 	}
+	defer resp.Body.Close()
 
 	res, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -52,6 +53,10 @@ func paramsRequest(text string) []byte {
 	)
 
 	resp, err := http.Get(url)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer resp.Body.Close()
 
 	res, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

@@ -93,6 +93,7 @@ func (pz PizzaTask) sendPizzaRequest() error {
 		log.Println(err)
 		return err
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
 		message := fmt.Sprintf("Status code isn't 200! It is %d", resp.StatusCode)
